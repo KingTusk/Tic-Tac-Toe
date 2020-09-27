@@ -18,9 +18,14 @@ int main() {
     bool cont = true;
     bool AImode = false;
     std::string name = "no name given";
+    char table[9] = { '1','2','3','4','5','6','7','8','9' };
+    char pturn = 'o';
+    int choice = 0;
+    bool win = false;
+    bool draw = true;
+    int tablesize = sizeof(table) / sizeof(table[0]);
 
     std::cout << "Welcome to tic tac toe! " << std::endl;
-
     std::cout << "Do you want to play vs another player or an AI? type 0 for player and 1 for AI: ";
     std::cin >> AImode;
     do { //this do while loop runs until a valid answer is given
@@ -32,9 +37,9 @@ int main() {
         }
     } while (!cont);
     std::cin.ignore(32767, '\n');//clears cin for use of getline later
-
     if (AImode) {
         char answer = 'y';
+
         std::cout << "Do you want to go first? (y/n) ";
         std::cin >> answer;
         std::cin.ignore(32767, '\n');//clears cin for use of getline later
@@ -61,19 +66,13 @@ int main() {
         playerx.pid = 'x';
         playero.pid = 'o';
     }
-    char table[9] = { '1','2','3','4','5','6','7','8','9' } ;
-    char pturn = 'o';
-    int choice = 0;
-    bool win = false;
-    bool draw = true;
-    int tablesize = sizeof(table) / sizeof(table[0]);
 
     do { //this do while loop runs until there is a winner, or there is a draw
 
-        if(AImode){//this if else statment determines whether or it's player vs AI or player vs player
+        if(AImode){//this if else statment determines whether it's player vs AI or player vs player
             draw = true;
             bool pchoice = true;
-            if (pturn == playerAI.pid) { //if else determiens whose turn it is
+            if (pturn == playerAI.pid) { //if else determines whose turn it is
                 pturn = playervsAI.pid;
             }
             else if (pturn == playervsAI.pid) {
@@ -85,12 +84,12 @@ int main() {
             }
             name = playervsAI.pname;
             printTable(table, tablesize); //prints table
-            if (pturn == playervsAI.pid) {
+            if (pturn == playervsAI.pid) { //This code runs on players turn
                 do { //this do while loop runs until the player chooses a valid position
                     pchoice = true,
                         std::cout << "\nPlayer " << name << " it is your turn, pick a number";
                     std::cin >> choice;
-                    if(checkForError()) { //checks for invalid inout and fixes any issues
+                    if(checkForError()) { //checks for invalid input and fixes any issues
                         std::cout << "Please only use numbers!";
                         pchoice = false;
                     }
@@ -100,14 +99,12 @@ int main() {
                     }
                 } while (!pchoice);
             }
-            else {
-                std::cout << "Stop 1";
-                choice = AIchoice(table, tablesize);
-                std::cout << "Stop 2";
+            else { //this code runs in AIs turn
+                choice = AIchoice(table, tablesize); //this code gives AI choice of tile
             }
             table[choice - 1] = pturn;
 
-            win = winCon(table, pturn);
+            win = winCon(table, pturn); //checks whether or not there is a winner
             for (int i = 0; i < tablesize; i++) { //determines whether or not the game is a draw
                 if (table[i] != 'x' && table[i] != 'o') {
                     draw = false;
@@ -166,7 +163,7 @@ int main() {
 }
 
 int AIchoice(char table[], int tablesize) {
-    //the code below generates a random number and checks whether or not the spot has been taken or not
+    //the code below generates a random number and checks whether or not the spot has been taken
     int choice = 0;
     bool free = true;
     do {
@@ -224,13 +221,14 @@ bool winCon(char table[], char pturn) {
 void printTable(char table[], int tablesize) { //Prints every element of the table in rows of three
     for (int i = 0; i < tablesize; i++) {
         if (i % 3 == 0 && i != 0) {
-            std::cout << "\n\n";
+            std::cout << "|\n\n";
         }
-        std::cout << table[i] << "\t";
+        std::cout << "|\t"<<table[i] << "\t";
     }
+    std::cout << "|";
 }
 
-int getRandomNumber(int min, int max) //code is from learncpp.com, it produces a random number between man and max
+int getRandomNumber(int min, int max) //code is from learncpp.com, it produces a random number between min and max
 {
     static constexpr double fraction{ 1.0 / (RAND_MAX + 1.0) };
     return min + static_cast<int>((max - min + 1) * (std::rand() * fraction));
