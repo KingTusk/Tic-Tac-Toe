@@ -39,18 +39,28 @@ int main() {
     std::cin.ignore(32767, '\n');//clears cin for use of getline later
     if (AImode) {
         char answer = 'y';
-
         std::cout << "Do you want to go first? (y/n) ";
         std::cin >> answer;
-        std::cin.ignore(32767, '\n');//clears cin for use of getline later
-        if (answer == 'y' || answer == 'Y') { //this if else determines who will go first
-            playerAI.pid = 'o';
-            playervsAI.pid = 'x';
-        }
-        else if (answer == 'n' || answer == 'N') {
-            playerAI.pid = 'x';
-            playervsAI.pid = 'o';
-        }
+        do { //this do while loop runs until user input is valid
+            cont = true;
+            if (answer == 'y' || answer == 'Y') { //this if else determines who will go first
+                playerAI.pid = 'o';
+                playervsAI.pid = 'x';
+            }
+            else if (answer == 'n' || answer == 'N') {
+                playerAI.pid = 'x';
+                playervsAI.pid = 'o';
+            }
+            else { //in case of invalid input, clears cin and asks for a new answer
+                cont = false;
+                std::cin.clear();
+                std::cin.ignore(32767, '\n');
+                std::cout << "Invalid input, try again";
+                std::cin >> answer;
+            }
+        } while(!cont);
+        std::cin.ignore(32767, '\n'); //clears cin for use of getline later
+
         playerAI.pname = "AI";
         std::cout << "Please enter your name: \n";
         std::getline(std::cin, playervsAI.pname); //saves player name
@@ -113,7 +123,7 @@ int main() {
             system("cls");
         }
 
-        else {//this is part of the if else statement to determine player vs player or pleyer vs AI
+        else {//this is part of the if else statement to determine player vs player or player vs AI
             draw = true;
             bool pchoice = true; 
             if (pturn == playerx.pid) { //if else determines whose turn it is
