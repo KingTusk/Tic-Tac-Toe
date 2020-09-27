@@ -26,7 +26,7 @@ int main() {
     int tablesize = sizeof(table) / sizeof(table[0]);
 
     std::cout << "Welcome to tic tac toe! " << std::endl;
-    std::cout << "Do you want to play vs another player or an AI? type 0 for player and 1 for AI: ";
+    std::cout << "Do you want to play vs another player or an AI? type 0 for player and 1 for AI: "; //makes players choose game mode, AI or duo
     std::cin >> AImode;
     do { //this do while loop runs until a valid answer is given
         cont = true;
